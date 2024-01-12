@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+class UStaticMeshComponent;
+class UBoxComponent;
+
 UCLASS()
 class KJYPLUGINS_API AWeaponBase : public AActor
 {
@@ -22,5 +25,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UStaticMeshComponent* WeaponMesh;
 
 };
