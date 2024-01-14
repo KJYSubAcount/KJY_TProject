@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WeaponInterface.h"
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
@@ -10,7 +11,7 @@ class UStaticMeshComponent;
 class UBoxComponent;
 
 UCLASS()
-class KJYPLUGINS_API AWeaponBase : public AActor
+class KJYPLUGINS_API AWeaponBase : public AActor, public IWeaponInterface
 {
 	GENERATED_BODY()
 	
@@ -27,7 +28,81 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-	UStaticMeshComponent* WeaponMesh;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventTrigger();
 
+	virtual void EventTrigger_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventShoot();
+
+	virtual void EventShoot_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventReload();
+
+	virtual void EventReload_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventPickUp(ACharacter* PlayerOwnChar);
+
+	virtual void EventPickUp_Implementation(ACharacter* PlayerOwnChar) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventResetAmmo();
+
+	virtual void EventResetAmmo_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventDrop(ACharacter* PlayerOwnChar);
+
+	virtual void EventDrop_Implementation(ACharacter* PlayerOwnChar) override;
+
+public:
+	UFUNCTION(Server, Reliable)
+	void ReqShoot(FVector vStart, FVector vEnd);
+
+public:
+	float GetFireStartLength();
+
+	UFUNCTION(BlueprintPure)
+	bool IsCanShoot();
+
+	bool UseAmmo();
+
+	void SetAmmo(int Ammo);
+
+	UFUNCTION(BlueprintCallable)
+	void OnUpdateAmmoToHud(int Ammo);
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* WeaponMesh;
+
+	UPROPERTY(BlueprintReadWrite)
+	ACharacter* pOwnChar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* ShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* ReloadMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UParticleSystem* WeaponFireEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* WeaponSoundBase;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* WeaponReloadSoundBase;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 WeaponDamage;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	UPROPERTY(ReplicatedUsing = OnRep_Ammo)
+	int m_Ammo;
 };
