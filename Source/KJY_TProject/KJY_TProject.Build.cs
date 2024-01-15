@@ -8,7 +8,7 @@ public class KJY_TProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "KJYPlugins" });
 
 		PublicIncludePaths.AddRange(new string[] { "KJYPlugins/Public" });
 		PublicIncludePaths.AddRange(new string[] { "KJYPlugins/Private" });

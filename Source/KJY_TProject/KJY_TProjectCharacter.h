@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "WeaponInterface.h"
 #include "KJY_TProjectCharacter.generated.h"
 
 class USpringArmComponent;
@@ -44,6 +45,9 @@ class AKJY_TProjectCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
 public:
 	AKJY_TProjectCharacter();
 	
@@ -55,6 +59,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void Fire(const FInputActionValue& Value);
 			
 
 protected:
@@ -69,5 +75,23 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void EquipTestWeapon(TSubclassOf<class AWeaponBase> WeaponClass);
+
+	UFUNCTION()
+	void TestWeaponSetOwner();
+
+	AActor* FindNearestWeapon();
+
+	UPROPERTY(BlueprintReadWrite)
+	AActor* m_EquipWeapon;
+public:
+	UFUNCTION(Server, Reliable)
+	void ReqTrigger();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ResTrigger();
 };
 

@@ -10,6 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+//플러그인 weaponbase추가
+#include "WeaponBase.h"
+#include "WeaponInterface.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -69,6 +72,37 @@ void AKJY_TProjectCharacter::BeginPlay()
 	}
 }
 
+void AKJY_TProjectCharacter::EquipTestWeapon(TSubclassOf<class AWeaponBase> WeaponClass)
+{
+}
+
+void AKJY_TProjectCharacter::TestWeaponSetOwner()
+{
+}
+
+AActor* AKJY_TProjectCharacter::FindNearestWeapon()
+{
+	TArray<AActor*> actors;
+	GetCapsuleComponent()->GetOverlappingActors(actors, AWeaponBase::StaticClass());
+
+	double nearestDist = 9999999.0f;
+	AActor* pNearestActor = nullptr;
+	for (AActor* pTarget : actors)
+	{
+		if (m_EquipWeapon == pTarget)
+			continue;
+
+		double dist = FVector::Distance(GetActorLocation(), pTarget->GetActorLocation());
+		if (dist >= nearestDist)
+			continue;
+
+		nearestDist = dist;
+		pNearestActor = pTarget;
+	}
+
+	return pNearestActor;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -86,6 +120,9 @@ void AKJY_TProjectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Look);
+
+		// Firing
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Fire);
 	}
 	else
 	{
@@ -127,4 +164,22 @@ void AKJY_TProjectCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
+{
+}
+
+void AKJY_TProjectCharacter::ReqTrigger_Implementation()
+{
+	ResTrigger();
+}
+
+void AKJY_TProjectCharacter::ResTrigger_Implementation()
+{
+	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	//if (nullptr == InterfaceObj)
+	//	return;
+	//
+	//InterfaceObj->Execute_EventTrigger(m_EquipWeapon);
 }
