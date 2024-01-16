@@ -17,7 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AKJY_TProjectCharacter : public ACharacter
+class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface
 {
 	GENERATED_BODY()
 
@@ -88,10 +88,32 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* m_EquipWeapon;
 public:
+	//匙飘况农 内靛 康开
+	UFUNCTION(Server, Reliable)
+	void ReqPressF();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ResPressF(AActor* PickUpActor);
+
+	UFUNCTION(Client, Reliable)
+	void ResPressFClient();
+
 	UFUNCTION(Server, Reliable)
 	void ReqTrigger();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void ResTrigger();
+
+	UFUNCTION(Server, Reliable)
+	void ReqReload();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ResReload();
+
+	UFUNCTION(Server, Reliable)
+	void ReqDrop();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ResDrop();
 };
 

@@ -103,6 +103,7 @@ AActor* AKJY_TProjectCharacter::FindNearestWeapon()
 	return pNearestActor;
 }
 
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -168,6 +169,19 @@ void AKJY_TProjectCharacter::Look(const FInputActionValue& Value)
 
 void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
 {
+	ReqTrigger();
+}
+
+void AKJY_TProjectCharacter::ReqPressF_Implementation()
+{
+}
+
+void AKJY_TProjectCharacter::ResPressF_Implementation(AActor* PickUpActor)
+{
+}
+
+void AKJY_TProjectCharacter::ResPressFClient_Implementation()
+{
 }
 
 void AKJY_TProjectCharacter::ReqTrigger_Implementation()
@@ -177,9 +191,27 @@ void AKJY_TProjectCharacter::ReqTrigger_Implementation()
 
 void AKJY_TProjectCharacter::ResTrigger_Implementation()
 {
-	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
-	//if (nullptr == InterfaceObj)
-	//	return;
-	//
-	//InterfaceObj->Execute_EventTrigger(m_EquipWeapon);
+//	IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
+//	if (WeaponInterface == nullptr)
+//	{
+//		return;
+//	}
+//	
+//	WeaponInterface->Execute_EventTrigger(m_EquipWeapon);
+}
+
+void AKJY_TProjectCharacter::ReqReload_Implementation()
+{
+}
+
+void AKJY_TProjectCharacter::ResReload_Implementation()
+{
+}
+
+void AKJY_TProjectCharacter::ReqDrop_Implementation()
+{
+}
+
+void AKJY_TProjectCharacter::ResDrop_Implementation()
+{
 }

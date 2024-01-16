@@ -35,20 +35,21 @@ public:
 	// 총알발사이벤트
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventShoot();
-
+	
 	// 재장전
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventReload();
-
+	
 	// 총알 다시 채우기
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventResetAmmo();
-
+	
 	// 줍기
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventPickUp(ACharacter* pOwnChar);
-
+	
 	// 버리기
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventDrop(ACharacter* pOwnChar);
+
 };
