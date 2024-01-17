@@ -48,6 +48,15 @@ class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PickUpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ReloadAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DropAction;
+
 public:
 	AKJY_TProjectCharacter();
 	
@@ -61,6 +70,12 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Fire(const FInputActionValue& Value);
+
+	void PickUp(const FInputActionValue& Value);
+
+	void Reload(const FInputActionValue& Value);
+
+	void Drop(const FInputActionValue& Value);
 			
 
 protected:
@@ -78,22 +93,24 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void EquipTestWeapon(TSubclassOf<class AWeaponBase> WeaponClass);
+	void EquipWeapon(TSubclassOf<class AWeaponBase> WeaponClass);
 
 	UFUNCTION()
-	void TestWeaponSetOwner();
+	void WeaponSetOwner();
 
 	AActor* FindNearestWeapon();
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* m_EquipWeapon;
+
+	FTimerHandle WeaponSetOwnerTimer;
 public:
 	//匙飘况农 内靛 康开
 	UFUNCTION(Server, Reliable)
-	void ReqPressF();
+	void ReqPickUp();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void ResPressF(AActor* PickUpActor);
+	void ResPickUp(AActor* PickUpActor);
 
 	UFUNCTION(Client, Reliable)
 	void ResPressFClient();

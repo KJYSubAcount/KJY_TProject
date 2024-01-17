@@ -16,6 +16,7 @@ AWeaponBase::AWeaponBase():m_Ammo(30)
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon");
+	WeaponMesh->SetCollisionProfileName("Weapon");
 	WeaponMesh->SetSimulatePhysics(true);
 	SetRootComponent(WeaponMesh);
 
@@ -47,7 +48,7 @@ void AWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 void AWeaponBase::EventTrigger_Implementation()
 {
 	//pOwnChar의 애니메이션 작동
-	//pOwnChar->PlayAnimMontage();
+	pOwnChar->PlayAnimMontage(ShootMontage);
 }
 
 void AWeaponBase::EventShoot_Implementation()
@@ -58,12 +59,12 @@ void AWeaponBase::EventShoot_Implementation()
 	}
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponFireEffect,
-		WeaponMesh->GetSocketLocation("muzzle"),
-		WeaponMesh->GetSocketRotation("muzzle"),
+		WeaponMesh->GetSocketLocation("Muzzle"),
+		WeaponMesh->GetSocketRotation("Muzzle"),
 		FVector(0.1f, 0.1f, 0.1f));
 
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), WeaponSoundBase,
-		WeaponMesh->GetSocketLocation("muzzle"));
+		WeaponMesh->GetSocketLocation("Muzzle"));
 
 	APlayerController* pPlayer0 = GetWorld()->GetFirstPlayerController();
 	if (pPlayer0 != pOwnChar->GetController())
@@ -79,10 +80,17 @@ void AWeaponBase::EventShoot_Implementation()
 
 void AWeaponBase::EventReload_Implementation()
 {
+	pOwnChar->PlayAnimMontage(ReloadMontage);
 }
 
 void AWeaponBase::EventPickUp_Implementation(ACharacter* PlayerOwnChar)
 {
+	pOwnChar = PlayerOwnChar;
+	WeaponMesh->SetSimulatePhysics(false);
+	WeaponMesh->SetCollisionProfileName("NoCollision");
+	WeaponMesh->AttachToComponent(pOwnChar->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+
+	///OnUpdateAmmoToHud(m_Ammo);
 }
 
 void AWeaponBase::EventResetAmmo_Implementation()
@@ -91,11 +99,46 @@ void AWeaponBase::EventResetAmmo_Implementation()
 
 void AWeaponBase::EventDrop_Implementation(ACharacter* PlayerOwnChar)
 {
+	OnUpdateAmmoToHud(0);
+	WeaponMesh->SetSimulatePhysics(true);
+	WeaponMesh->SetCollisionProfileName("Weapon");
+	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	
+	pOwnChar = nullptr;
 }
 
 void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
 {
+	if (false == UseAmmo())
+		return;
 
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("ReqShoot_Implementation"));
+
+	FHitResult result;
+	FCollisionObjectQueryParams collisionObjParams;
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_PhysicsBody);
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Vehicle);
+	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Destructible);
+
+	FCollisionQueryParams collisionParams;
+	collisionParams.AddIgnoredActor(pOwnChar);
+
+	bool isHit = GetWorld()->LineTraceSingleByObjectType(result, vStart, vEnd, collisionObjParams, collisionParams);
+	DrawDebugLine(GetWorld(), vStart, vEnd, FColor::Red, false, 5.0f);
+
+	if (false == isHit)
+		return;
+
+	ACharacter* pHitChar = Cast<ACharacter>(result.GetActor());
+	if (false == IsValid(pHitChar))
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("HitChar = %s"), *pHitChar->GetName()));
+
+	UGameplayStatics::ApplyDamage(pHitChar, 10.0f, pOwnChar->GetController(), this, UDamageType::StaticClass());
 }
 
 float AWeaponBase::GetFireStartLength()
@@ -105,16 +148,30 @@ float AWeaponBase::GetFireStartLength()
 
 bool AWeaponBase::IsCanShoot()
 {
-	return false;
+	if (m_Ammo <= 0)
+		return false;
+
+	return true;
 }
 
 bool AWeaponBase::UseAmmo()
 {
-	return false;
+	if (false == IsCanShoot())
+		return false;
+
+	m_Ammo = m_Ammo - 1;
+	m_Ammo = FMath::Clamp(m_Ammo, 0, 30);
+
+	OnRep_Ammo();
+
+	return true;
 }
 
 void AWeaponBase::SetAmmo(int Ammo)
 {
+	m_Ammo = Ammo;
+
+	OnRep_Ammo();
 }
 
 void AWeaponBase::OnUpdateAmmoToHud(int Ammo)
@@ -123,5 +180,6 @@ void AWeaponBase::OnUpdateAmmoToHud(int Ammo)
 
 void AWeaponBase::OnRep_Ammo()
 {
+	OnUpdateAmmoToHud(m_Ammo);
 }
 

@@ -7,6 +7,18 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	AK47 UMETA(DisplayName = "AK47"),
+	M4A1 UMETA(DisplayName = "M4A1"),
+	Thompson UMETA(DisplayName = "THOMPSON"),
+	Berreta UMETA(DisplayerName = "BERETTA"),
+	Shotgun UMETA(DisplayName = "Shotgun"),
+	End UMETA(Hidden)
+};
+
 class UStaticMeshComponent;
 class UBoxComponent;
 
@@ -79,6 +91,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* WeaponMesh;
 
+	UPROPERTY(EditAnywhere)
+	EWeaponType KindOfWeapon;
+
 	UPROPERTY(BlueprintReadWrite)
 	ACharacter* pOwnChar;
 
@@ -103,6 +118,6 @@ public:
 	UFUNCTION()
 	void OnRep_Ammo();
 
-	UPROPERTY(ReplicatedUsing = OnRep_Ammo)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, ReplicatedUsing = OnRep_Ammo)
 	int m_Ammo;
 };

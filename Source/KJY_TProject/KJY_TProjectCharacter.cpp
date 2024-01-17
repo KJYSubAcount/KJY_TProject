@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Net/UnrealNetwork.h"
 //플러그인 weaponbase추가
 #include "WeaponBase.h"
 #include "WeaponInterface.h"
@@ -72,12 +73,38 @@ void AKJY_TProjectCharacter::BeginPlay()
 	}
 }
 
-void AKJY_TProjectCharacter::EquipTestWeapon(TSubclassOf<class AWeaponBase> WeaponClass)
+void AKJY_TProjectCharacter::EquipWeapon(TSubclassOf<class AWeaponBase> WeaponClass)
 {
+	if (false == HasAuthority())
+	{
+		return;
+	}
+
+	m_EquipWeapon = GetWorld()->SpawnActor<AWeaponBase>(WeaponClass);
+
+	AWeaponBase* pWeapon = Cast<AWeaponBase>(m_EquipWeapon);
+	if (pWeapon == nullptr)
+	{
+		return;
+	}
+
+	pWeapon->pOwnChar = this;
+
+	WeaponSetOwner();
+
+	m_EquipWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("WeaponSocket"));
 }
 
-void AKJY_TProjectCharacter::TestWeaponSetOwner()
+void AKJY_TProjectCharacter::WeaponSetOwner()
 {
+	if (IsValid(GetController()))
+	{
+		m_EquipWeapon->SetOwner(GetController());
+		return;
+	}
+
+	FTimerManager& tm = GetWorld()->GetTimerManager();
+	tm.SetTimer(WeaponSetOwnerTimer, this, &AKJY_TProjectCharacter::WeaponSetOwner, 0.1f, false, 0.1f);
 }
 
 AActor* AKJY_TProjectCharacter::FindNearestWeapon()
@@ -124,6 +151,16 @@ void AKJY_TProjectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 		// Firing
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Fire);
+
+		// PickUp
+		EnhancedInputComponent->BindAction(PickUpAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::PickUp);
+
+		// Reload
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Reload);
+
+		// Drop
+		EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Drop);
+
 	}
 	else
 	{
@@ -172,12 +209,59 @@ void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
 	ReqTrigger();
 }
 
-void AKJY_TProjectCharacter::ReqPressF_Implementation()
+void AKJY_TProjectCharacter::PickUp(const FInputActionValue& Value)
 {
+	ReqPickUp();
 }
 
-void AKJY_TProjectCharacter::ResPressF_Implementation(AActor* PickUpActor)
+void AKJY_TProjectCharacter::Reload(const FInputActionValue& Value)
 {
+	ReqReload();
+}
+
+void AKJY_TProjectCharacter::Drop(const FInputActionValue& Value)
+{
+	ReqDrop();
+}
+
+/// ============ implementation ===============///
+
+void AKJY_TProjectCharacter::ReqPickUp_Implementation()
+{
+	AActor* pNearestActor = FindNearestWeapon();
+
+	if (false == IsValid(pNearestActor))
+		return;
+
+	if (nullptr != m_EquipWeapon)
+	{
+		m_EquipWeapon->SetOwner(nullptr);
+	}
+
+	pNearestActor->SetOwner(GetController());
+
+	ResPickUp(pNearestActor);
+}
+
+void AKJY_TProjectCharacter::ResPickUp_Implementation(AActor* PickUpActor)
+{
+	//if (nullptr != m_EquipWeapon)
+	//{
+	//	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	//	if (nullptr == InterfaceObj)
+	//		return;
+	//
+	//	InterfaceObj->Execute_EventDrop(m_EquipWeapon, this);
+	//	m_EquipWeapon = nullptr;
+	//}
+	//
+	//m_EquipWeapon = PickUpActor;
+	//
+	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	//if (nullptr == InterfaceObj)
+	//	return;
+	//
+	//InterfaceObj->Execute_EventPickUp(m_EquipWeapon, this);
 }
 
 void AKJY_TProjectCharacter::ResPressFClient_Implementation()
