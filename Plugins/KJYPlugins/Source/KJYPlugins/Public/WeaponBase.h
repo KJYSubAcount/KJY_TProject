@@ -40,6 +40,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventTrigger();
 
@@ -54,12 +55,12 @@ public:
 	void EventReload();
 
 	virtual void EventReload_Implementation() override;
-
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void EventPickUp(ACharacter* PlayerOwnChar);
+	void EventPickUp(ACharacter* pOwnChar);
 
-	virtual void EventPickUp_Implementation(ACharacter* PlayerOwnChar) override;
-
+	virtual void EventPickUp_Implementation(ACharacter* pOwnChar) override;
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventResetAmmo();
 
@@ -69,7 +70,7 @@ public:
 	void EventDrop(ACharacter* PlayerOwnChar);
 
 	virtual void EventDrop_Implementation(ACharacter* PlayerOwnChar) override;
-
+	
 public:
 	UFUNCTION(Server, Reliable)
 	void ReqShoot(FVector vStart, FVector vEnd);
@@ -95,7 +96,7 @@ public:
 	EWeaponType KindOfWeapon;
 
 	UPROPERTY(BlueprintReadWrite)
-	ACharacter* pOwnChar;
+	ACharacter* m_pOwnChar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ShootMontage;

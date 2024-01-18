@@ -48,7 +48,7 @@ void AWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 void AWeaponBase::EventTrigger_Implementation()
 {
 	//pOwnChar의 애니메이션 작동
-	pOwnChar->PlayAnimMontage(ShootMontage);
+	m_pOwnChar->PlayAnimMontage(ShootMontage);
 }
 
 void AWeaponBase::EventShoot_Implementation()
@@ -67,7 +67,7 @@ void AWeaponBase::EventShoot_Implementation()
 		WeaponMesh->GetSocketLocation("Muzzle"));
 
 	APlayerController* pPlayer0 = GetWorld()->GetFirstPlayerController();
-	if (pPlayer0 != pOwnChar->GetController())
+	if (pPlayer0 != m_pOwnChar->GetController())
 	{
 		return;
 	}
@@ -80,12 +80,12 @@ void AWeaponBase::EventShoot_Implementation()
 
 void AWeaponBase::EventReload_Implementation()
 {
-	pOwnChar->PlayAnimMontage(ReloadMontage);
+	m_pOwnChar->PlayAnimMontage(ReloadMontage);
 }
 
-void AWeaponBase::EventPickUp_Implementation(ACharacter* PlayerOwnChar)
+void AWeaponBase::EventPickUp_Implementation(ACharacter* pOwnChar)
 {
-	pOwnChar = PlayerOwnChar;
+	m_pOwnChar = pOwnChar;
 	WeaponMesh->SetSimulatePhysics(false);
 	WeaponMesh->SetCollisionProfileName("NoCollision");
 	WeaponMesh->AttachToComponent(pOwnChar->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
@@ -104,7 +104,7 @@ void AWeaponBase::EventDrop_Implementation(ACharacter* PlayerOwnChar)
 	WeaponMesh->SetCollisionProfileName("Weapon");
 	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 	
-	pOwnChar = nullptr;
+	m_pOwnChar = nullptr;
 }
 
 void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
@@ -124,7 +124,7 @@ void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
 	collisionObjParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Destructible);
 
 	FCollisionQueryParams collisionParams;
-	collisionParams.AddIgnoredActor(pOwnChar);
+	collisionParams.AddIgnoredActor(m_pOwnChar);
 
 	bool isHit = GetWorld()->LineTraceSingleByObjectType(result, vStart, vEnd, collisionObjParams, collisionParams);
 	DrawDebugLine(GetWorld(), vStart, vEnd, FColor::Red, false, 5.0f);
@@ -138,7 +138,7 @@ void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
 
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("HitChar = %s"), *pHitChar->GetName()));
 
-	UGameplayStatics::ApplyDamage(pHitChar, 10.0f, pOwnChar->GetController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(pHitChar, 10.0f, m_pOwnChar->GetController(), this, UDamageType::StaticClass());
 }
 
 float AWeaponBase::GetFireStartLength()

@@ -88,7 +88,7 @@ void AKJY_TProjectCharacter::EquipWeapon(TSubclassOf<class AWeaponBase> WeaponCl
 		return;
 	}
 
-	pWeapon->pOwnChar = this;
+	pWeapon->m_pOwnChar = this;
 
 	WeaponSetOwner();
 
@@ -245,23 +245,34 @@ void AKJY_TProjectCharacter::ReqPickUp_Implementation()
 
 void AKJY_TProjectCharacter::ResPickUp_Implementation(AActor* PickUpActor)
 {
-	//if (nullptr != m_EquipWeapon)
-	//{
-	//	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
-	//	if (nullptr == InterfaceObj)
-	//		return;
-	//
-	//	InterfaceObj->Execute_EventDrop(m_EquipWeapon, this);
-	//	m_EquipWeapon = nullptr;
-	//}
-	//
-	//m_EquipWeapon = PickUpActor;
-	//
-	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
-	//if (nullptr == InterfaceObj)
-	//	return;
-	//
-	//InterfaceObj->Execute_EventPickUp(m_EquipWeapon, this);
+	m_EquipWeapon = PickUpActor;
+
+	if (nullptr != m_EquipWeapon)
+	{
+		AWeaponBase* pWeapon = Cast<AWeaponBase>(m_EquipWeapon);
+		if (pWeapon == nullptr)
+		{
+			return;
+		}
+
+		pWeapon->SetOwner(this);
+		IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
+		if (nullptr == WeaponInterface)
+			return;
+
+		if (WeaponInterface == nullptr)
+		{
+			return;
+		}
+		WeaponInterface->Execute_EventDrop(m_EquipWeapon, this);
+	}
+
+	IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
+	if (WeaponInterface == nullptr)
+	{
+		return;
+	}
+	WeaponInterface->Execute_EventPickUp(m_EquipWeapon, this);
 }
 
 void AKJY_TProjectCharacter::ResPressFClient_Implementation()
@@ -275,13 +286,13 @@ void AKJY_TProjectCharacter::ReqTrigger_Implementation()
 
 void AKJY_TProjectCharacter::ResTrigger_Implementation()
 {
-//	IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
-//	if (WeaponInterface == nullptr)
-//	{
-//		return;
-//	}
-//	
-//	WeaponInterface->Execute_EventTrigger(m_EquipWeapon);
+	IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
+	if (WeaponInterface == nullptr)
+	{
+		return;
+	}
+	
+	WeaponInterface->Execute_EventTrigger(m_EquipWeapon);
 }
 
 void AKJY_TProjectCharacter::ReqReload_Implementation()

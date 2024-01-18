@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WeaponInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "WeaponInterface.h"
 #include "KJY_TProjectCharacter.generated.h"
 
 class USpringArmComponent;
@@ -17,7 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface
+class AKJY_TProjectCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
