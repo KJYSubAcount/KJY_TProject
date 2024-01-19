@@ -143,7 +143,14 @@ void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
 
 float AWeaponBase::GetFireStartLength()
 {
-	return 0.0f;
+	if (false == IsValid(m_pOwnChar))
+		return 0.0f;
+
+	USpringArmComponent* pArm = Cast<USpringArmComponent>(m_pOwnChar->GetComponentByClass(USpringArmComponent::StaticClass()));
+	if (false == IsValid(pArm))
+		return 0.0f;
+
+	return pArm->TargetArmLength + 100;
 }
 
 bool AWeaponBase::IsCanShoot()

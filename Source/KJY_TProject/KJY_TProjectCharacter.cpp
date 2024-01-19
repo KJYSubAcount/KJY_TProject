@@ -305,8 +305,19 @@ void AKJY_TProjectCharacter::ResReload_Implementation()
 
 void AKJY_TProjectCharacter::ReqDrop_Implementation()
 {
+	if (false == IsValid(m_EquipWeapon))
+		return;
+
+	m_EquipWeapon->SetOwner(nullptr);
+	ResDrop();
 }
 
 void AKJY_TProjectCharacter::ResDrop_Implementation()
 {
+	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	if (nullptr == InterfaceObj)
+		return;
+
+	InterfaceObj->Execute_EventDrop(m_EquipWeapon, this);
+	m_EquipWeapon = nullptr;
 }

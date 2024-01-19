@@ -11,5 +11,6 @@ public class KJY_TProject : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "KJYPlugins", "OnlineSubsystem", "OnlineSubsystemUtils" });
 
         PublicIncludePaths.AddRange(new string[] { "KJY_TProject" });
+        PrivateIncludePaths.AddRange(new string[] { "KJY_TProject" });
     }
 }
