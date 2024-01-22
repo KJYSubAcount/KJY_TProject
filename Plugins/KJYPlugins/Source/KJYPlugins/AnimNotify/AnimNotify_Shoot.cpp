@@ -16,7 +16,7 @@ void UAnimNotify_Shoot::OnAnimNotifyInterface_Implementation(USkeletalMeshCompon
 
 	if (nullptr != pWeaponInterface)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("pownergood"));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("pownergood"));
 		// IWeaponInterface 를 상속받았다면 EventShoot 함수를 호출합니다.
 		pWeaponInterface->Execute_EventShoot(pOwner);
 	}

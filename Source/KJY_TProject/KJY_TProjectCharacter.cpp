@@ -150,7 +150,7 @@ void AKJY_TProjectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Look);
 
 		// Firing
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::Fire);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AKJY_TProjectCharacter::Fire);
 
 		// PickUp
 		EnhancedInputComponent->BindAction(PickUpAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::PickUp);
@@ -206,6 +206,10 @@ void AKJY_TProjectCharacter::Look(const FInputActionValue& Value)
 
 void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
 {
+	AWeaponBase* pWeapon = Cast<AWeaponBase>(m_EquipWeapon);
+	// pweapon의 m_ammo가 0이면 return
+	if (IsValid(pWeapon) && pWeapon->m_Ammo <= 0)
+		return;
 	ReqTrigger();
 }
 
