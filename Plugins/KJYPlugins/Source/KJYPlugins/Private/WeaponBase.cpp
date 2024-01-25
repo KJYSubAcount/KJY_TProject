@@ -10,9 +10,9 @@
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
-AWeaponBase::AWeaponBase():m_Ammo(30)
+AWeaponBase::AWeaponBase() :m_Ammo(30)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon");
@@ -28,7 +28,7 @@ AWeaponBase::AWeaponBase():m_Ammo(30)
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -103,7 +103,7 @@ void AWeaponBase::EventDrop_Implementation(ACharacter* PlayerOwnChar)
 	WeaponMesh->SetSimulatePhysics(true);
 	WeaponMesh->SetCollisionProfileName("Weapon");
 	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	
+
 	m_pOwnChar = nullptr;
 }
 
@@ -189,4 +189,3 @@ void AWeaponBase::OnRep_Ammo()
 {
 	OnUpdateAmmoToHud(m_Ammo);
 }
-
