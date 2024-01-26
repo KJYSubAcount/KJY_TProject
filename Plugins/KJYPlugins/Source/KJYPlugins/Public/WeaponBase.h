@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WeaponInterface.h"
+#include "KJYPlugins/AnimNotify/AnimInterface.h"
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
