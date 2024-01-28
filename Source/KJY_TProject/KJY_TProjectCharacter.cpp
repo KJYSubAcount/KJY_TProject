@@ -327,6 +327,8 @@ void AKJY_TProjectCharacter::ResDrop_Implementation()
 	m_EquipWeapon = nullptr;
 }
 
+// 아래는 이벤트(인터페이스) 임시방편
+
 void AKJY_TProjectCharacter::EventTrigger_Implementation()
 {
 }
@@ -353,5 +355,9 @@ void AKJY_TProjectCharacter::EventPickUp_Implementation(ACharacter* pOwnChar)
 }
 
 void AKJY_TProjectCharacter::EventDrop_Implementation(ACharacter* pOwnChar)
+{
+}
+
+void AKJY_TProjectCharacter::EventGetItem_Implementation(EItemType itemType)
 {
 }

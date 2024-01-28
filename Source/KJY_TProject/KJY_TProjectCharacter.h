@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WeaponInterface.h"
+#include "ItemInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "KJY_TProjectCharacter.generated.h"
@@ -17,7 +18,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface
+class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface, public IItemInterface
 {
 	GENERATED_BODY()
 
@@ -141,5 +142,11 @@ public:
 		virtual void EventResetAmmo_Implementation() override;
 		virtual void EventPickUp_Implementation(ACharacter* pOwnChar) override;
 		virtual void EventDrop_Implementation(ACharacter* pOwnChar) override;
+
+		// IItemInterface
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventGetItem(EItemType itemType);
+
+	void EventGetItem_Implementation(EItemType itemType) override;
 };
 

@@ -8,6 +8,11 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+class UStaticMeshComponent;
+class UBoxComponent;
+class USphereComponent;
+class ACharacter;
+class UParticleSystem;
 
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
@@ -19,9 +24,6 @@ enum class EWeaponType : uint8
 	Shotgun UMETA(DisplayName = "Shotgun"),
 	End UMETA(Hidden)
 };
-
-class UStaticMeshComponent;
-class UBoxComponent;
 
 UCLASS()
 class KJYPLUGINS_API AWeaponBase : public AActor, public IWeaponInterface
@@ -91,7 +93,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* WeaponMesh;
+	UStaticMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere)
 	EWeaponType KindOfWeapon;
