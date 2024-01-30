@@ -302,10 +302,16 @@ void AKJY_TProjectCharacter::ResTrigger_Implementation()
 
 void AKJY_TProjectCharacter::ReqReload_Implementation()
 {
+	ResReload();
 }
 
 void AKJY_TProjectCharacter::ResReload_Implementation()
 {
+	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	if (nullptr == InterfaceObj)
+		return;
+
+	InterfaceObj->Execute_EventReload(m_EquipWeapon);
 }
 
 void AKJY_TProjectCharacter::ReqDrop_Implementation()
@@ -360,4 +366,23 @@ void AKJY_TProjectCharacter::EventDrop_Implementation(ACharacter* pOwnChar)
 
 void AKJY_TProjectCharacter::EventGetItem_Implementation(EItemType itemType)
 {
+	switch (itemType)
+	{
+	case EItemType::IT_MAG:
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("EventGetItem Mag"));
+
+		
+	}
+	break;
+
+	case EItemType::IT_HEAL:
+	{
+		
+	}
+	break;
+
+	default:
+		break;
+	}
 }

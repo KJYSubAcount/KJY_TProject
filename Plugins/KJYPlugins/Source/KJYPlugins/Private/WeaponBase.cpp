@@ -71,7 +71,7 @@ void AWeaponBase::EventShoot_Implementation()
 	{
 		return;
 	}
-
+	
 	FVector vStart = WeaponMesh->GetSocketLocation("Muzzle");
 	FVector vEnd = vStart + WeaponMesh->GetForwardVector() * 10000.0f;
 
@@ -103,6 +103,8 @@ void AWeaponBase::EventDrop_Implementation(ACharacter* PlayerOwnChar)
 	WeaponMesh->SetSimulatePhysics(true);
 	WeaponMesh->SetCollisionProfileName("Weapon");
 	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	// 무기 앞으로 날려보내기
+	WeaponMesh->AddImpulse(PlayerOwnChar->GetActorForwardVector() * 300.0f);
 
 	m_pOwnChar = nullptr;
 }

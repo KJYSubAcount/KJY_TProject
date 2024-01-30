@@ -42,6 +42,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemType m_eItemType;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//EItemType m_eItemType;
 };
