@@ -14,4 +14,6 @@ class KJYPLUGINS_API AThompson : public AWeaponBase
 {
 	GENERATED_BODY()
 	
+	public:
+	AThompson();
 };

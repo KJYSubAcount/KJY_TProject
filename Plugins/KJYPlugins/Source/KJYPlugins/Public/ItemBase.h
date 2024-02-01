@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ItemInterface.h"
+#include "Stores/Structs.h"
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
 
@@ -41,5 +42,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemType m_eItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)	
+	FItemData ItemData;
 
 };

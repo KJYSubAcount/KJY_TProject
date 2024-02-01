@@ -71,6 +71,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Fire(const FInputActionValue& Value);
+	void StopFire(const FInputActionValue& Value);
 
 	void PickUp(const FInputActionValue& Value);
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "WeaponInterface.h"
 #include "KJYPlugins/AnimNotify/AnimInterface.h"
+#include "Stores/Structs.h"
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
@@ -118,6 +119,17 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 WeaponDamage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItemData ItemData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsAuto = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TimeBetweenShots = 0.1f;
+
+	FTimerHandle AutomaticTimer;
 
 	UFUNCTION()
 	void OnRep_Ammo();

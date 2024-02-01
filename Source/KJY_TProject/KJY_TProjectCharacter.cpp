@@ -151,6 +151,7 @@ void AKJY_TProjectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 		// Firing
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AKJY_TProjectCharacter::Fire);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AKJY_TProjectCharacter::StopFire);
 
 		// PickUp
 		EnhancedInputComponent->BindAction(PickUpAction, ETriggerEvent::Triggered, this, &AKJY_TProjectCharacter::PickUp);
@@ -211,6 +212,13 @@ void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
 	if (IsValid(pWeapon) && pWeapon->m_Ammo <= 0)
 		return;
 	ReqTrigger();
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+
+}
+
+void AKJY_TProjectCharacter::StopFire(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("StopFire"));
 }
 
 void AKJY_TProjectCharacter::PickUp(const FInputActionValue& Value)
@@ -295,7 +303,7 @@ void AKJY_TProjectCharacter::ResTrigger_Implementation()
 	{
 		return;
 	}
-	
+
 	WeaponInterface->Execute_EventTrigger(m_EquipWeapon);
 	EventShoot_Implementation();
 }

@@ -72,6 +72,7 @@ void AWeaponBase::EventShoot_Implementation()
 		return;
 	}
 	
+
 	FVector vStart = WeaponMesh->GetSocketLocation("Muzzle");
 	FVector vEnd = vStart + WeaponMesh->GetForwardVector() * 10000.0f;
 

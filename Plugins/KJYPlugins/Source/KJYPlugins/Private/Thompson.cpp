@@ -3,3 +3,9 @@
 
 #include "Thompson.h"
 
+AThompson::AThompson()
+{
+	KindOfWeapon = EWeaponType::Thompson;
+	
+	IsAuto = true;
+}
