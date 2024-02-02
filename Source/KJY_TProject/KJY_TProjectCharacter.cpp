@@ -219,6 +219,11 @@ void AKJY_TProjectCharacter::Fire(const FInputActionValue& Value)
 void AKJY_TProjectCharacter::StopFire(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("StopFire"));
+	AWeaponBase* pWeapon = Cast<AWeaponBase>(m_EquipWeapon);
+	if (IsValid(pWeapon))
+	{
+		pWeapon->GetWorldTimerManager().ClearTimer(pWeapon->TimerHandle_ShotDelay);
+	}
 }
 
 void AKJY_TProjectCharacter::PickUp(const FInputActionValue& Value)

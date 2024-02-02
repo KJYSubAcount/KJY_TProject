@@ -76,7 +76,15 @@ void AWeaponBase::EventShoot_Implementation()
 	FVector vStart = WeaponMesh->GetSocketLocation("Muzzle");
 	FVector vEnd = vStart + WeaponMesh->GetForwardVector() * 10000.0f;
 
+	///Weapontype이 berreta면 연사기능이 없음
+	if (KindOfWeapon == EWeaponType::Berreta)
+	{
+		ReqShoot(vStart, vEnd);
+		return;
+	}
 	ReqShoot(vStart, vEnd);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_ShotDelay, this, &AWeaponBase::EventShoot_Implementation, ShotDelay, false);
 }
 
 void AWeaponBase::EventReload_Implementation()

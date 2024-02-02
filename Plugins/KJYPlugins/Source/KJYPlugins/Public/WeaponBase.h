@@ -129,7 +129,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeBetweenShots = 0.1f;
 
-	FTimerHandle AutomaticTimer;
+	FTimerHandle TimerHandle_ShotDelay;
+	float ShotDelay = 0.1f; // 발사 간격 (초)
 
 	UFUNCTION()
 	void OnRep_Ammo();
