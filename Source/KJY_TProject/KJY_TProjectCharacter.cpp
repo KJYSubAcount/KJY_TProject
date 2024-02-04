@@ -262,34 +262,23 @@ void AKJY_TProjectCharacter::ReqPickUp_Implementation()
 
 void AKJY_TProjectCharacter::ResPickUp_Implementation(AActor* PickUpActor)
 {
-	m_EquipWeapon = PickUpActor;
-
 	if (nullptr != m_EquipWeapon)
 	{
-		AWeaponBase* pWeapon = Cast<AWeaponBase>(m_EquipWeapon);
-		if (pWeapon == nullptr)
-		{
-			return;
-		}
-
-		pWeapon->SetOwner(this);
-		IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
-		if (nullptr == WeaponInterface)
+		IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+		if (nullptr == InterfaceObj)
 			return;
 
-		if (WeaponInterface == nullptr)
-		{
-			return;
-		}
-		WeaponInterface->Execute_EventDrop(m_EquipWeapon, this);
+		InterfaceObj->Execute_EventDrop(m_EquipWeapon, this);
+		m_EquipWeapon = nullptr;
 	}
 
-	IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(m_EquipWeapon);
-	if (WeaponInterface == nullptr)
-	{
+	m_EquipWeapon = PickUpActor;
+
+	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(m_EquipWeapon);
+	if (nullptr == InterfaceObj)
 		return;
-	}
-	WeaponInterface->Execute_EventPickUp(m_EquipWeapon, this);
+
+	InterfaceObj->Execute_EventPickUp(m_EquipWeapon, this);
 }
 
 void AKJY_TProjectCharacter::ResPressFClient_Implementation()
@@ -354,6 +343,8 @@ void AKJY_TProjectCharacter::EventTrigger_Implementation()
 
 void AKJY_TProjectCharacter::EventShoot_Implementation()
 {
+	AWeaponBase* pWeapon = Cast<AWeaponBase>(this->m_EquipWeapon);
+	
 	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(this->m_EquipWeapon);
 	if (nullptr == InterfaceObj)
 		return;

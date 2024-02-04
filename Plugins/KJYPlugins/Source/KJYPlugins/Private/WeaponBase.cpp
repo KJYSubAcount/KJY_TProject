@@ -58,6 +58,8 @@ void AWeaponBase::EventShoot_Implementation()
 		return;
 	}
 
+	m_pOwnChar->PlayAnimMontage(ShootMontage);
+
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponFireEffect,
 		WeaponMesh->GetSocketLocation("Muzzle"),
 		WeaponMesh->GetSocketRotation("Muzzle"),
@@ -149,7 +151,7 @@ void AWeaponBase::ReqShoot_Implementation(FVector vStart, FVector vEnd)
 
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("HitChar = %s"), *pHitChar->GetName()));
 
-	UGameplayStatics::ApplyDamage(pHitChar, 10.0f, m_pOwnChar->GetController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(pHitChar, WeaponDamage, m_pOwnChar->GetController(), this, UDamageType::StaticClass());
 }
 
 float AWeaponBase::GetFireStartLength()
