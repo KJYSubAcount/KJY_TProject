@@ -299,7 +299,7 @@ void AKJY_TProjectCharacter::ResTrigger_Implementation()
 	}
 
 	WeaponInterface->Execute_EventTrigger(m_EquipWeapon);
-	EventShoot_Implementation();
+	//EventShoot_Implementation();
 }
 
 void AKJY_TProjectCharacter::ReqReload_Implementation()
@@ -343,13 +343,13 @@ void AKJY_TProjectCharacter::EventTrigger_Implementation()
 
 void AKJY_TProjectCharacter::EventShoot_Implementation()
 {
-	AWeaponBase* pWeapon = Cast<AWeaponBase>(this->m_EquipWeapon);
-	
-	IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(this->m_EquipWeapon);
-	if (nullptr == InterfaceObj)
-		return;
-
-	InterfaceObj->Execute_EventShoot(this->m_EquipWeapon);
+	//AWeaponBase* pWeapon = Cast<AWeaponBase>(this->m_EquipWeapon);
+	//
+	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(this->m_EquipWeapon);
+	//if (nullptr == InterfaceObj)
+	//	return;
+	//
+	//InterfaceObj->Execute_EventShoot(this->m_EquipWeapon);
 }
 
 void AKJY_TProjectCharacter::EventReload_Implementation()

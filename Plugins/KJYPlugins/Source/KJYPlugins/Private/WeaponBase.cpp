@@ -49,6 +49,7 @@ void AWeaponBase::EventTrigger_Implementation()
 {
 	//pOwnChar의 애니메이션 작동
 	m_pOwnChar->PlayAnimMontage(ShootMontage);
+	EventShoot_Implementation();
 }
 
 void AWeaponBase::EventShoot_Implementation()
@@ -57,8 +58,6 @@ void AWeaponBase::EventShoot_Implementation()
 	{
 		return;
 	}
-
-	m_pOwnChar->PlayAnimMontage(ShootMontage);
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponFireEffect,
 		WeaponMesh->GetSocketLocation("Muzzle"),
@@ -84,9 +83,13 @@ void AWeaponBase::EventShoot_Implementation()
 		ReqShoot(vStart, vEnd);
 		return;
 	}
-	ReqShoot(vStart, vEnd);
+	else
+	{
+		ReqShoot(vStart, vEnd);
+		GetWorldTimerManager().SetTimer(TimerHandle_ShotDelay, this, &AWeaponBase::EventShoot_Implementation, ShotDelay, false);
+	}
+	m_pOwnChar->PlayAnimMontage(ShootMontage);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_ShotDelay, this, &AWeaponBase::EventShoot_Implementation, ShotDelay, false);
 }
 
 void AWeaponBase::EventReload_Implementation()
