@@ -18,7 +18,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AKJY_TProjectCharacter : public ACharacter, public IWeaponInterface, public IItemInterface
+class AKJY_TProjectCharacter : public ACharacter, public IItemInterface
 {
 	GENERATED_BODY()
 
@@ -136,13 +136,6 @@ public:
 	void ResDrop();
 
 	public:
-		// IWeaponInterface
-		virtual void EventTrigger_Implementation() override;
-		virtual void EventShoot_Implementation() override;
-		virtual void EventReload_Implementation() override;
-		virtual void EventResetAmmo_Implementation() override;
-		virtual void EventPickUp_Implementation(ACharacter* pOwnChar) override;
-		virtual void EventDrop_Implementation(ACharacter* pOwnChar) override;
 
 		// IItemInterface
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)

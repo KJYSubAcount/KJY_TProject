@@ -335,39 +335,6 @@ void AKJY_TProjectCharacter::ResDrop_Implementation()
 	m_EquipWeapon = nullptr;
 }
 
-// 아래는 이벤트(인터페이스) 임시방편
-
-void AKJY_TProjectCharacter::EventTrigger_Implementation()
-{
-}
-
-void AKJY_TProjectCharacter::EventShoot_Implementation()
-{
-	//AWeaponBase* pWeapon = Cast<AWeaponBase>(this->m_EquipWeapon);
-	//
-	//IWeaponInterface* InterfaceObj = Cast<IWeaponInterface>(this->m_EquipWeapon);
-	//if (nullptr == InterfaceObj)
-	//	return;
-	//
-	//InterfaceObj->Execute_EventShoot(this->m_EquipWeapon);
-}
-
-void AKJY_TProjectCharacter::EventReload_Implementation()
-{
-}
-
-void AKJY_TProjectCharacter::EventResetAmmo_Implementation()
-{
-}
-
-void AKJY_TProjectCharacter::EventPickUp_Implementation(ACharacter* pOwnChar)
-{
-}
-
-void AKJY_TProjectCharacter::EventDrop_Implementation(ACharacter* pOwnChar)
-{
-}
-
 void AKJY_TProjectCharacter::EventGetItem_Implementation(EItemType itemType)
 {
 	switch (itemType)
