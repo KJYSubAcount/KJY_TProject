@@ -81,7 +81,6 @@ void AWeaponBase::EventShoot_Implementation()
 	if (KindOfWeapon == EWeaponType::Berreta)
 	{
 		ReqShoot(vStart, vEnd);
-		return;
 	}
 	else
 	{
@@ -199,6 +198,7 @@ void AWeaponBase::SetAmmo(int Ammo)
 
 void AWeaponBase::OnUpdateAmmoToHud(int Ammo)
 {
+
 }
 
 void AWeaponBase::OnRep_Ammo()

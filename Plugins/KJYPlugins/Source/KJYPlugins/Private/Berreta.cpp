@@ -5,5 +5,6 @@
 
 ABerreta::ABerreta()
 {
+	KindOfWeapon = EWeaponType::Berreta;
 	m_Ammo = 15;
 }
